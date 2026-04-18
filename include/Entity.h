@@ -36,7 +36,7 @@ public:
 
     //healing logic
     void heal(int amount){
-        health =+ amount;
+        health += amount;
         if (health > maxHealth)
             health = maxHealth;
     }

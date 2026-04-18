@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "mingw",
+      "displayName": "MinGW Makefiles",
+      "description": "Configure using MinGW Makefiles generator (works with MSYS2 / mingw-w64)",
+      "generator": "MinGW Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {}
+    }
+  ]
+}
