@@ -4,8 +4,6 @@
 
 **Flavortown RPG** is a text-based C++ roguelike adventure where you battle through infinite procedural kitchens, fight food-based monsters, and loot legendary ingredients.
 
-Built for **Hack Club High Seas** 🏴‍☠️.
-
 ## 🎮 Features
 * **Infinite Dungeons:** No two runs are the same. The menu changes every night.
 * **Turn-Based Combat:** Strategic battles against *Spicy Goblins* and *Sous-Chef Skeletons*.
