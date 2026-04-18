@@ -8,7 +8,7 @@ Game::Game()
     isrunning = true;    // Engine is on
 }
 
-void Game::run()
+void Game::run() // main siwtcher of current state
 {
     while (isrunning)
     {
@@ -32,8 +32,10 @@ void Game::run()
 void Game::showMenu()
 {
     // 1. print a welcome title
+    system("cls");
+
     int option;
-    string TITLE = "HOIASDLKAHSDLHASDLKAHSLDK";
+    string TITLE = "FlavorTown RPG";
     const int BoxspaceAfterBefore = 4;
     int boxPadding = TITLE.length() + BoxspaceAfterBefore*2;
     const int Xres = 80;
@@ -44,7 +46,7 @@ void Game::showMenu()
     
     for(int i = 0; i<emptyline; i++) cout<<endl;
     cout<<setw(spaceBeforeBox)<<" "; for(int i = 0; i<boxPadding; i++) cout <<"="; cout<<endl;
-    cout<<setw(spaceBeforeBox)<<" "; cout<<"="<<setw(BoxspaceAfterBefore-1)<<" "; cout<<TITLE<<setw(BoxspaceAfterBefore-1)<<" "<<"="<<endl;
+    cout<<setw(spaceBeforeBox)<<" "; cout<<"|"<<setw(BoxspaceAfterBefore-1)<<" "; cout<<TITLE<<setw(BoxspaceAfterBefore-1)<<" "<<"|"<<endl;
     cout<<setw(spaceBeforeBox)<<" "; for(int i = 0; i<boxPadding; i++) cout <<"="; cout<<endl;
     cout<<setw(spaceBeforeBox)<<" "<<"[1] START THE GAME!"<<endl;
     cout<<setw(spaceBeforeBox)<<" "<<"[2] QUIT!"<<endl;
@@ -53,7 +55,7 @@ void Game::showMenu()
     cin >> option;
     for(int i = 0; i<emptyline; i++) cout<<endl;
     
-    
+
     switch (option)
     {
     case 1:
@@ -68,12 +70,41 @@ void Game::showMenu()
 }
 
 void Game::playturn() {
-    cout<<"The Game is currently Running!"<<endl;
-    currentState = GAMEOVER;
+    system("cls"); //clear current screen
+
+    cout << "\n\n\n";
+    cout << "          ==================================================          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          |           BATTLE SYSTEM COMMENCING...          |          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          |    (Imagine an epic battle with a Goblin!)     |          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          ==================================================          " << endl;
+    cout << "\n\n";
+    cout << "                   Press [Enter] to flee to the menu...                 " << endl;
+    
+    // We use cin.ignore() and cin.get() to wait for an Enter key press.
+    // cin.ignore() clears out the 'Enter' key you pressed during the main menu.
+    cin.ignore(1000, '\n'); 
+    cin.get(); 
+
+    // 4. Change the state so the engine routes us back to the start!
+    currentState = MENU;
 }
 
 void Game::showGameOver() {
-    cout<<" GAME OVER!"<<endl;
+     system("cls"); //clear current screen
+
+    cout << "\n\n\n";
+    cout << "          ==================================================          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          |           GAME OVER   ---   THANK YOU          |          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          |                                                |          " << endl;
+    cout << "          ==================================================          " << endl;
+    cout << "\n\n";
+    
     isrunning = false;
 }
 
