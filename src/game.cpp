@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "displayUI.h"
+#include <limits>
 #include <iomanip>
 using namespace std;
 
@@ -32,41 +34,40 @@ void Game::run() // main siwtcher of current state
 void Game::showMenu()
 {
     // 1. print a welcome title
-    system("cls");
+   bool isValidInput = false;
+    do {
+        system("cls");
+        MenuBox battleMenu(2); // Reduced padding to match your image style
 
-    int option;
-    string TITLE = "FlavorTown RPG";
-    const int BoxspaceAfterBefore = 4;
-    int boxPadding = TITLE.length() + BoxspaceAfterBefore*2;
-    const int Xres = 80;
-    const int Yres = 24;
-    const int textline = 7;
-    const int emptyline = (Yres - textline)/2;
-    int spaceBeforeBox = (Xres/2) - (boxPadding/2);
-    
-    for(int i = 0; i<emptyline; i++) cout<<endl;
-    cout<<setw(spaceBeforeBox)<<" "; for(int i = 0; i<boxPadding; i++) cout <<"="; cout<<endl;
-    cout<<setw(spaceBeforeBox)<<" "; cout<<"|"<<setw(BoxspaceAfterBefore-1)<<" "; cout<<TITLE<<setw(BoxspaceAfterBefore-1)<<" "<<"|"<<endl;
-    cout<<setw(spaceBeforeBox)<<" "; for(int i = 0; i<boxPadding; i++) cout <<"="; cout<<endl;
-    cout<<setw(spaceBeforeBox)<<" "<<"[1] START THE GAME!"<<endl;
-    cout<<setw(spaceBeforeBox)<<" "<<"[2] QUIT!"<<endl;
-    cout<<setw(spaceBeforeBox)<<" "; for(int i = 0; i<boxPadding; i++) cout <<"="; cout<<endl;
-    cout<<setw(spaceBeforeBox)<<" "; cout<<"Choice: ";
-    cin >> option;
-    for(int i = 0; i<emptyline; i++) cout<<endl;
-    
-
-    switch (option)
-    {
-    case 1:
-       currentState = PLAYING;
-        break;
-    case 2:
-        currentState = GAMEOVER;
-        break;
-    default:
-        break;
-    }
+        battleMenu.setTitle("FlavorTown RPG");
+        
+        battleMenu.addSeparator(); 
+        battleMenu.addOption("[1] START THE GAME!");
+        battleMenu.addOption("[2] QUIT!");
+        
+        // Pass 'true' to tell the box not to add spacing at the bottom yet
+        battleMenu.draw(true); 
+        // Call our new method to get input
+        int option = battleMenu.getUserInput("Choice: ");
+        if(option != 1 && option != 2)
+        {
+            isValidInput = false;
+            cin.clear();
+            cin.ignore(numeric_limits<int>::max(), '\n' );
+        }
+        else {
+            isValidInput = true;
+            switch (option)
+            {
+            case 1:
+                currentState = PLAYING;
+                break;
+            case 2:
+                currentState = GAMEOVER;
+                break;
+            }
+        }
+    } while(!isValidInput);
 }
 
 void Game::playturn() {
@@ -107,5 +108,3 @@ void Game::showGameOver() {
     
     isrunning = false;
 }
-
-

@@ -12,7 +12,7 @@ class MenuBox {
 private:
     string title;
     string subtitle;
-    vector <string> options;
+    vector<string> options;
     int padding;
 
     int terminalWidth;
@@ -22,6 +22,10 @@ private:
     const string SEPARATOR_TOKEN = "<SEPARATOR>";
     const string EMPTY_TOKEN = "<EMPTY>";
 
+    // 
+    int lastXOffset;
+    int lastBoxHeight;
+    int lastYOffset;
 public:
     MenuBox(int padAmount = 5) {
         padding = padAmount;
@@ -29,25 +33,25 @@ public:
         terminalHeight = 24;
     }
 
-    void setResoultion (int width, int height) {
+    void setResolution(int width, int height) {
         terminalWidth = width;
         terminalHeight = height;
     }
 
-    void setTitle(string T) {title = T; }
-    void setSubtitle (string s) {subtitle = s;}
+    void setTitle(string t) { title = t; }
+    void setSubtitle(string s) { subtitle = s; }
 
     // add content methods
-    void addOptions (string opt) {options.push_back(opt);}
+    void addOption (string opt) {options.push_back(opt);}
     void addSeparator () { options.push_back(SEPARATOR_TOKEN);}
     void addEmptyLine () { options.push_back(EMPTY_TOKEN);}
 
-    void draw() {
+    void draw(bool expectingInput = false) {
         //1. calculate the box width (ignore both special tokens)
         int maxlen= 0;
         if (title.length() > maxlen) maxlen = title.length();
-        if(subtitle.length() > maxlen ) maxlen = title.length();
-        for(const string& opt : options) {
+        if (subtitle.length() > maxlen ) maxlen = subtitle.length();
+        for (const string& opt : options) {
             if(opt != SEPARATOR_TOKEN && opt != EMPTY_TOKEN && opt.length() > maxlen) {
                 maxlen = opt.length();
             }
@@ -62,34 +66,80 @@ public:
 
         // calculating centering effects
         int yOffset = (terminalHeight - boxHeight) / 2;
-        int xOffset = (terminalHeight - boxWidth) / 2;
+        int xOffset = (terminalWidth - boxWidth) / 2;
         if (yOffset < 0) yOffset = 0;
         if (xOffset < 0) xOffset = 0;
 
         // setup spacing tools
+        lastXOffset = xOffset;
+        lastBoxHeight = boxHeight;
+        lastYOffset = yOffset;
+
         string leftIndent(xOffset, ' ');
         string innerPad(padding, ' ');
         string emptyInnerLine = leftIndent + "|" + string(boxWidth - 2, ' ') + "|\n";
         string border = leftIndent + string(boxWidth, '=') + "\n";
-        
 
+        // start drawing
+        for (int i = 0; i < yOffset; i++) cout << endl;
+
+        cout << border;
+        cout << emptyInnerLine;
+
+        if (!title.empty()) {
+            string rightPad((boxWidth - 2) - title.length() - padding, ' ');
+            cout << leftIndent << "|" << innerPad << title << rightPad << "|" << endl;
+            cout << emptyInnerLine;
+        }
+
+        if (!subtitle.empty()) {
+            string rightPad((boxWidth - 2) - subtitle.length() - padding, ' ');
+            cout << leftIndent << "|" << innerPad << subtitle << rightPad << "|" << endl;
+            cout << emptyInnerLine;
+        }
+
+        // Draw Options, Separator, and Empty Lines
+        for (const string& opt : options) {
+            if (opt == SEPARATOR_TOKEN) {
+                // Draw an horizontal line 
+                cout<< leftIndent << "|" << string(boxWidth - 2, '=') << "|" <<endl;
+            } else if (opt == EMPTY_TOKEN) {
+                    // draw an empty line wth bordere
+                    cout << leftIndent << "|" << string(boxWidth - 2, ' ') << "|" << endl;
+            } else {
+                // draw normal text
+                string rightPad((boxWidth - 2) - opt.length() - padding, ' ');
+                cout << leftIndent << "|" << innerPad << opt << rightPad << "|" << endl;
+            }
+        }
+
+        cout << emptyInnerLine;
+        cout << border;
+
+        if(!expectingInput) {
+        for (int i = 0; i < (terminalHeight - boxHeight - yOffset); i++) cout << endl;
+        }
     }
 
-   
+    //
+    int getUserInput (string promptText = "Choice: ") {
+        int input;
 
+        string leftIndent(lastXOffset, ' ');
+        
+        //
+        cout << leftIndent << promptText;
 
-
-
-
+        //
+        cin >> input;
+        //
+        //
+        int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
+        for (int i = 0; i < remainingLines; i++) cout << endl;
+        
+        return input;
+    }
 };
-
-
-
-
-
-
-
-
 
 
 #endif
