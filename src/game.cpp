@@ -15,7 +15,6 @@ void Game::run() // main siwtcher of current state
     while (isrunning)
     {
         // the fsm router
-
         switch (currentState)
         {
         case MENU:
@@ -35,7 +34,7 @@ void Game::showMenu()
 {
     // 1. print a welcome title
    bool isValidInput = false;
-    do {
+    while (!isValidInput){
         system("cls");
         MenuBox battleMenu(2); // Reduced padding to match your image style
 
@@ -49,14 +48,13 @@ void Game::showMenu()
         battleMenu.draw(true); 
         // Call our new method to get input
         int option = battleMenu.getUserInput("Choice: ");
+
         if(option != 1 && option != 2)
         {
             isValidInput = false;
             cin.clear();
             cin.ignore(numeric_limits<int>::max(), '\n' );
-        }
-        else {
-            isValidInput = true;
+        } else {
             switch (option)
             {
             case 1:
@@ -66,45 +64,35 @@ void Game::showMenu()
                 currentState = GAMEOVER;
                 break;
             }
+            isValidInput = true;
+            cin.ignore();
         }
-    } while(!isValidInput);
+    }
 }
 
 void Game::playturn() {
     system("cls"); //clear current screen
+    MenuBox playBox(6);
+    playBox.setTitle("Battle System Commencin...");
+    playBox.addEmptyLine();
+    playBox.setSubtitle("(Imagine an Epic battle with a Goblin!)");
+    playBox.draw(true);
+    playBox.systemPause("Press [Enter] to flee to the menu...");
 
-    cout << "\n\n\n";
-    cout << "          ==================================================          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          |           BATTLE SYSTEM COMMENCING...          |          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          |    (Imagine an epic battle with a Goblin!)     |          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          ==================================================          " << endl;
-    cout << "\n\n";
-    cout << "                   Press [Enter] to flee to the menu...                 " << endl;
-    
-    // We use cin.ignore() and cin.get() to wait for an Enter key press.
-    // cin.ignore() clears out the 'Enter' key you pressed during the main menu.
-    cin.ignore(1000, '\n'); 
-    cin.get(); 
 
-    // 4. Change the state so the engine routes us back to the start!
     currentState = MENU;
 }
 
 void Game::showGameOver() {
      system("cls"); //clear current screen
+      MenuBox playBox(6);
+    playBox.setTitle("GAME OVER!");
+    playBox.addEmptyLine();
+    playBox.setSubtitle("(Please come back!)");
+    playBox.draw(true);
+    playBox.systemPause("Press [Enter] to flee to the continue...");
 
-    cout << "\n\n\n";
-    cout << "          ==================================================          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          |           GAME OVER   ---   THANK YOU          |          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          |                                                |          " << endl;
-    cout << "          ==================================================          " << endl;
-    cout << "\n\n";
+    
     
     isrunning = false;
 }

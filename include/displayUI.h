@@ -139,6 +139,18 @@ public:
         
         return input;
     }
+
+    void systemPause (string promptText = "Press [enter] to flee to menu") {
+
+        string leftIndent(lastXOffset, ' ');
+
+        cout << leftIndent << promptText;
+        cin.get();
+    
+        int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
+        for (int i = 0; i < remainingLines; i++) cout << endl;
+        
+    }
 };
 
 
