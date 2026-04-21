@@ -17,13 +17,15 @@ private:
     GameState currentState;
     bool isrunning;
 
+    Player *myPlayer;
     // private helper functions;
-
     void showMenu();
     void playturn();
     void showGameOver();
 public:
+
     Game();
+    ~Game();
     void run();
 };
 

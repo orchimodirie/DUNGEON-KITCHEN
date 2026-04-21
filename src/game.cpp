@@ -6,8 +6,14 @@ using namespace std;
 
 Game::Game()
 {
-    currentState = MENU; // gamealways star at menu
+    currentState = MENU; // gamealways start at menu
     isrunning = true;    // Engine is on
+
+     myPlayer = new Player("Chef", 100, 15);
+}
+
+Game::~Game() {
+    delete myPlayer;
 }
 
 void Game::run() // main siwtcher of current state
@@ -32,7 +38,7 @@ void Game::run() // main siwtcher of current state
 
 void Game::showMenu()
 {
-    // 1. print a welcome title
+    // print a welcome title
    bool isValidInput = false;
     while (!isValidInput){
         system("cls");
@@ -44,7 +50,7 @@ void Game::showMenu()
         battleMenu.addOption("[1] START THE GAME!");
         battleMenu.addOption("[2] QUIT!");
         
-        // Pass 'true' to tell the box not to add spacing at the bottom yet
+        // Pass true to tell the box not to add spacing at the bottom yet
         battleMenu.draw(true); 
         // Call our new method to get input
         int option = battleMenu.getUserInput("Choice: ");
@@ -72,10 +78,11 @@ void Game::showMenu()
 
 void Game::playturn() {
     system("cls"); //clear current screen
+    // 
     MenuBox playBox(6);
     playBox.setTitle("Battle System Commencin...");
     playBox.addEmptyLine();
-    playBox.setSubtitle("(Imagine an Epic battle with a Goblin!)");
+    playBox.setSubtitle("Current HP: " + to_string(myPlayer->health));
     playBox.draw(true);
     playBox.systemPause("Press [Enter] to flee to the menu...");
 
@@ -90,7 +97,7 @@ void Game::showGameOver() {
     playBox.addEmptyLine();
     playBox.setSubtitle("(Please come back!)");
     playBox.draw(true);
-    playBox.systemPause("Press [Enter] to flee to the continue...");
+    playBox.systemPause("Press [Enter] to flee to exit...");
 
     
     
