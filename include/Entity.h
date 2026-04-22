@@ -26,13 +26,13 @@ public:
     }
 };
 
-class Player : public Entity {
-    private: 
-        int  maxHealth;
-        int potions;
-        int level;
-        const int HealAmount = 25;
+class Player : public Entity { 
     public:
+    int  maxHealth;
+    int potions;
+    int level;
+    const int HealAmount = 25;
+
         Player(string n, int h, int d) : Entity(n, h, d) {
             maxHealth = h;
             level = 1;

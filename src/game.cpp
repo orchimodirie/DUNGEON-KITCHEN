@@ -71,35 +71,102 @@ void Game::showMenu()
                 break;
             }
             isValidInput = true;
-            cin.ignore();
         }
     }
 }
 
-void Game::playturn() {
-    system("cls"); //clear current screen
-    // 
-    MenuBox playBox(6);
-    playBox.setTitle("Battle System Commencin...");
-    playBox.addEmptyLine();
-    playBox.setSubtitle("Current HP: " + to_string(myPlayer->health));
-    playBox.draw(true);
-    playBox.systemPause("Press [Enter] to flee to the menu...");
+void Game::playturn() {    
+    Enemy goblin("Spicy Goblin", 50, 50); //first enemy
+
+    while(myPlayer->isAlive() && goblin.isAlive()) {
+        
+        system("cls"); //clear screen
+
+        MenuBox battleUI(2);
+        battleUI.setTitle("--- BATTLE ---");
+        battleUI.setSubtitle("A wild " + goblin.name + " appears!");
+        battleUI.addEmptyLine();
+        
+        // Display dynamic stats (using to_string to convert integers to text)
+        battleUI.addOption(myPlayer->name + " HP: " + to_string(myPlayer->health) + "/" + to_string(myPlayer->maxHealth) + "  |  Potions: " + to_string(myPlayer->potions));
+        battleUI.addOption(goblin.name + " HP: " + to_string(goblin.health));
+        battleUI.addSeparator();
+        
+        // Options
+        battleUI.addOption("[1] Attack with Spatula");
+        battleUI.addOption("[2] Drink Heal Potion");
+        battleUI.addEmptyLine();
+        
+        battleUI.draw(true);
+        int option = battleUI.getUserInput();
+        
+        if(option == 1) {
+            system("cls");
+            goblin.takeDamage(myPlayer->damage);
+            //draw box for the feedback
+            MenuBox hitbox(2);
+            hitbox.setTitle("Bam! Bam! Bam!");
+            hitbox.addOption("You hit " + goblin.name + " for " + to_string(myPlayer->damage) + " damage!");
+            hitbox.draw(false);
+            hitbox.systemPause("Press [Enter] to continue...");
+        } else if (option == 2) {
+            system("cls");
+            MenuBox healbox(2);
+            healbox.setTitle("Player Healed!");
+            healbox.addOption("Last HP: " + to_string(myPlayer->health));
+                myPlayer->heal();
+            healbox.addOption("New HP: " + to_string(myPlayer->health));
+            healbox.draw(false);
+            healbox.systemPause("Press [Enter] to continue... ");
+
+        } else {
+            continue; // wrong input choice will restart the looping game
+        }
+
+        if (goblin.isAlive()) {
+            system("cls");
+            MenuBox hitbox(2);
+            myPlayer->takeDamage(goblin.damage);
+
+            hitbox.setTitle("Slash! Slash! Slash!");
+            hitbox.addOption("You've hit by " + goblin.name + " for " + to_string(goblin.damage) + " damage!");
+            hitbox.draw(false);
+            hitbox.systemPause("Press [Enter] to continue...");
+        }
+    }
+
+    //after the loop exit
+    system("cls");
+    MenuBox resultbox(2);
+    if(myPlayer->isAlive()) {
+        resultbox.setTitle("VICTORY!");
+        resultbox.addOption("You cooked the " + goblin.name + "!");
+        resultbox.draw(true);
+        resultbox.systemPause("Press [Enter] to continue...");
+        
+        currentState = MENU;
+    } else {
+        resultbox.setTitle("DEFEATED!");
+        resultbox.addOption("Cooked by " + goblin.name + "!");
+        resultbox.draw(true);
+        resultbox.systemPause("Press [Enter] to continue...");
+
+        currentState = GAMEOVER;
+    }
 
 
-    currentState = MENU;
+    
 }
 
 void Game::showGameOver() {
-     system("cls"); //clear current screen
-      MenuBox playBox(6);
+
+    system("cls"); //clear current screeen
+    MenuBox playBox(6);
     playBox.setTitle("GAME OVER!");
     playBox.addEmptyLine();
     playBox.setSubtitle("(Please come back!)");
     playBox.draw(true);
     playBox.systemPause("Press [Enter] to flee to exit...");
 
-    
-    
     isrunning = false;
 }

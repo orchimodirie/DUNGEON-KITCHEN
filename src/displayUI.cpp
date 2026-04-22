@@ -90,6 +90,7 @@ int MenuBox::getUserInput (string promptText) {
         cout << leftIndent << promptText;
 
         cin >> input;
+        cin.ignore(1000, '\n');
         
         int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
         for (int i = 0; i < remainingLines; i++) cout << endl;
