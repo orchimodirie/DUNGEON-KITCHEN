@@ -4,4 +4,5 @@ project(flavortown-rpg)
 
 include_directories(include)
 
-add_executable(flavortown-rpg src/main.cpp src/game.cpp src/displayUI.cpp)
+add_executable(flavortown-rpg src/main.cpp src/game.cpp src/displayUI.cpp
+    src/Inventory.cpp)

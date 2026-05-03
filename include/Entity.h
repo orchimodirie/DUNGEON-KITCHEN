@@ -66,7 +66,7 @@ class Player : public Entity {
 
 class Enemy : public Entity {
     public:
-        double expDrop;
+         int expDrop;
         Enemy(string n, int h, int d, int exp) : Entity(n, h, d) {
             expDrop = exp;
         }

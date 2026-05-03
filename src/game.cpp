@@ -76,8 +76,26 @@ void Game::showMenu()
 }
 
 void Game::playturn() {    
-    Enemy goblin("Spicy Goblin", 50, 15, 120); //first enemy
 
+    // list of possible enemies
+    string possibleNames[] = {"Spicy Goblin", "Burnt Toast" , "Moldy Cheese", "Sous-Chef Skeleton"};
+
+    // pick a random name (0 through 3)
+    int nameIndex = rand() % 4;
+    string randomName = possibleNames[nameIndex];
+
+    //generate random stats
+    // HP (random number between 30 and 70)
+    int randomHP = (rand() % 41) + 30;
+
+    //random damage
+    int randomDMG = (rand() % 16 ) + 5;
+
+    //random EXP
+    int randomEXP = (rand() % 61 ) + 40;
+
+    Enemy goblin(randomName, randomHP, randomDMG, randomEXP);
+    
     while(myPlayer->isAlive() && goblin.isAlive()) {
         
         system("cls"); //clear screenW
@@ -142,46 +160,45 @@ void Game::playturn() {
     //after the loop exit
     system("cls");
     MenuBox resultbox(2);
-    if(myPlayer->isAlive()) {
-        // player won, grant exp
+    
+    if (myPlayer->isAlive()) {
+        // 1. Grant EXP
         myPlayer->exp += goblin.expDrop;
 
+        // 2. Show Victory Screen
         resultbox.setTitle("VICTORY!");
         resultbox.addOption("You cooked the " + goblin.name + "!");
         resultbox.addOption("Gained " + to_string(goblin.expDrop) + " EXP!");
-        resultbox.draw(true);
+        resultbox.draw(false); 
         resultbox.systemPause("Press [Enter] to continue...");
         
-
-        if(myPlayer->exp >= myPlayer->expToNextLevel) {
+        // 3. Check for Level Up (No 'else' needed here!)
+        if (myPlayer->exp >= myPlayer->expToNextLevel) {
             myPlayer->levelUp();
-            //level up
 
             system("cls");
-            MenuBox levelbox(2);
-            resultbox.setTitle("VICTORY!");
-            resultbox.addOption("You leveled up! Level: " + to_string(myPlayer->level));
-            resultbox.addOption("You cooked the " + goblin.name + "!"); 
-            resultbox.draw(true);
-            resultbox.systemPause("Press [Enter] to continue...");
-                
-        } else {
-
-            resultbox.setTitle("VICTORY!");
-            resultbox.addOption("You cooked the " + goblin.name + "!");
-            resultbox.draw(true);
-            resultbox.systemPause("Press [Enter] to continue...");
+            MenuBox levelbox(2); // Use the new box!
+            levelbox.setTitle("LEVEL UP!");
+            levelbox.addEmptyLine();
+            levelbox.addOption("You reached Level " + to_string(myPlayer->level) + "!");
+            levelbox.addOption("Max HP increased to " + to_string(myPlayer->maxHealth));
+            levelbox.addOption("Damage increased to " + to_string(myPlayer->damage));
+            levelbox.addEmptyLine();
+            levelbox.draw(false);
+            levelbox.systemPause("Press [Enter] to claim your power...");
         }
         
         currentState = MENU;
+
     } else {
+        // 4. Defeat Screen (This is the ONLY 'else' we need)
         resultbox.setTitle("DEFEATED!");
         resultbox.addOption("Cooked by " + goblin.name + "!");
-        resultbox.draw(true);
+        resultbox.draw(false);
         resultbox.systemPause("Press [Enter] to continue...");
 
         currentState = GAMEOVER;
-    }   
+    }
 }
 
 void Game::showGameOver() {
