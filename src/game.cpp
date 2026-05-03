@@ -56,7 +56,7 @@ void Game::showMenu()
         // Call our new method to get input
         int option = battleMenu.getUserInput("Choice: ");
 
-        if(option != 1 && option != 2)
+        if(option != 1 && option != 2 && option != 3)
         {
             isValidInput = false;
             cin.clear();
@@ -189,6 +189,8 @@ void Game::playturn() {
             myPlayer->inventory.AddItem(ItemName, random_BNS_DMG);
 
             weaponDrop.addOption("The Goblin drop a " + ItemName);
+            weaponDrop.draw(true);
+            weaponDrop.systemPause("Press [Enter] to continue");
         }
         
         // 3. Check for Level Up (No 'else' needed here!)
