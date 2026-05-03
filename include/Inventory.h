@@ -33,6 +33,7 @@ public:
     //methods
     void AddItem(std::string n, int dmg);
     void display();
+    void dropItem(std::string targetName);
 
 };
 
