@@ -76,27 +76,31 @@ void Game::showMenu()
 }
 
 void Game::playturn() {    
-    Enemy goblin("Spicy Goblin", 50, 50); //first enemy
+    Enemy goblin("Spicy Goblin", 50, 15, 120); //first enemy
 
     while(myPlayer->isAlive() && goblin.isAlive()) {
         
-        system("cls"); //clear screen
+        system("cls"); //clear screenW
 
         MenuBox battleUI(2);
-        battleUI.setTitle("--- BATTLE ---");
+        battleUI.setTitle(" BATTLE ---");
         battleUI.setSubtitle("A wild " + goblin.name + " appears!");
         battleUI.addEmptyLine();
-        
+        //
+        battleUI.addOption("Level: " + to_string(myPlayer->level) + " " + myPlayer->name + " HP: " + to_string(myPlayer->health) + "/" + to_string(myPlayer->maxHealth));
+
         // Display dynamic stats (using to_string to convert integers to text)
-        battleUI.addOption(myPlayer->name + " HP: " + to_string(myPlayer->health) + "/" + to_string(myPlayer->maxHealth) + "  |  Potions: " + to_string(myPlayer->potions));
+        battleUI.addOption("EXP: " + to_string(myPlayer->exp) + "/" + to_string(myPlayer->expToNextLevel)  + "  |  Potions: " + to_string(myPlayer->potions));
+        
+        
+        battleUI.addEmptyLine();
         battleUI.addOption(goblin.name + " HP: " + to_string(goblin.health));
         battleUI.addSeparator();
         
         // Options
         battleUI.addOption("[1] Attack with Spatula");
         battleUI.addOption("[2] Drink Heal Potion");
-        battleUI.addEmptyLine();
-        
+
         battleUI.draw(true);
         int option = battleUI.getUserInput();
         
@@ -129,7 +133,7 @@ void Game::playturn() {
             myPlayer->takeDamage(goblin.damage);
 
             hitbox.setTitle("Slash! Slash! Slash!");
-            hitbox.addOption("You've hit by " + goblin.name + " for " + to_string(goblin.damage) + " damage!");
+            hitbox.addOption(goblin.name + " attacked you for " + to_string(goblin.damage) + " damage!");
             hitbox.draw(false);
             hitbox.systemPause("Press [Enter] to continue...");
         }
@@ -139,10 +143,35 @@ void Game::playturn() {
     system("cls");
     MenuBox resultbox(2);
     if(myPlayer->isAlive()) {
+        // player won, grant exp
+        myPlayer->exp += goblin.expDrop;
+
         resultbox.setTitle("VICTORY!");
         resultbox.addOption("You cooked the " + goblin.name + "!");
+        resultbox.addOption("Gained " + to_string(goblin.expDrop) + " EXP!");
         resultbox.draw(true);
         resultbox.systemPause("Press [Enter] to continue...");
+        
+
+        if(myPlayer->exp >= myPlayer->expToNextLevel) {
+            myPlayer->levelUp();
+            //level up
+
+            system("cls");
+            MenuBox levelbox(2);
+            resultbox.setTitle("VICTORY!");
+            resultbox.addOption("You leveled up! Level: " + to_string(myPlayer->level));
+            resultbox.addOption("You cooked the " + goblin.name + "!"); 
+            resultbox.draw(true);
+            resultbox.systemPause("Press [Enter] to continue...");
+                
+        } else {
+
+            resultbox.setTitle("VICTORY!");
+            resultbox.addOption("You cooked the " + goblin.name + "!");
+            resultbox.draw(true);
+            resultbox.systemPause("Press [Enter] to continue...");
+        }
         
         currentState = MENU;
     } else {
@@ -152,10 +181,7 @@ void Game::playturn() {
         resultbox.systemPause("Press [Enter] to continue...");
 
         currentState = GAMEOVER;
-    }
-
-
-    
+    }   
 }
 
 void Game::showGameOver() {

@@ -31,12 +31,17 @@ class Player : public Entity {
     int  maxHealth;
     int potions;
     int level;
+    int exp;
+    int expToNextLevel;
+
     const int HealAmount = 25;
 
         Player(string n, int h, int d) : Entity(n, h, d) {
             maxHealth = h;
-            level = 1;
-            potions = 3;
+            level = 1; // level intialized as one
+            potions = 3; // default number of potions
+            exp = 0;    // default baseline of exp
+            expToNextLevel = 100;   //intial threshold of level 1
         }
 
         void heal() {
@@ -45,12 +50,26 @@ class Player : public Entity {
                 if(health > maxHealth) health = maxHealth;
                 potions--;
             }
-        }   
+        }
+
+        void levelUp(){
+            level += 1;
+            maxHealth += 20;
+            health = maxHealth;
+            potions = 3;
+
+            exp -= expToNextLevel; // this will retain the extra exp
+            expToNextLevel *= 1.5;
+        }
+        
 };
 
 class Enemy : public Entity {
     public:
-        Enemy(string n, int h, int d) : Entity(n, h, d) {}
+        double expDrop;
+        Enemy(string n, int h, int d, int exp) : Entity(n, h, d) {
+            expDrop = exp;
+        }
 };
 
 #endif
