@@ -1,5 +1,6 @@
 #include "Inventory.h"
 #include <string>
+#include "displayUI.h"
 #include <iostream>
 
 //destructor
@@ -26,19 +27,27 @@ void InventoryList::AddItem(std::string n, int dmg) {
 }
 
 void InventoryList::display() {
-    Item *walker = head;
+    system("cls");
+    MenuBox invBox(2);
+    invBox.setTitle("--- INVENTORY ---");
 
     if (head == nullptr) 
     {
-        std::cout<<"The List is empty!"<<std::endl;
-        return;
+            invBox.addOption("No item YET");
+    } else {
+        Item *walker = head;
+        int counter = 1;
+
+        while (walker != nullptr) {
+            invBox.addOption("[" + to_string(counter) + "] " + walker->name + " (+ " + to_string(walker->DamageBonus) + " DMG)");
+            walker = walker->next;
+            counter++;
+        }
     }
 
-    
-    while (walker != nullptr) {
-        std::cout<<"Item 1: "<<walker->name<<" Damage Bonus = "<<walker->DamageBonus<<std::endl;
-        walker = walker->next;
-    }
+    invBox.addEmptyLine();
+    invBox.draw(false);
+    invBox.systemPause("Press [Enter] to close inventory...");
 }
 
 
@@ -54,29 +63,33 @@ void InventoryList::dropItem(std::string targetName) {
         delete head; //delete the current head;
         head = nextNode;
 
+        if(head == nullptr) {
+            tail = nullptr;
+        }
         return;
     }
 
 
     //if the target is at the middle or at the tail
-    Item *previous;
+    Item *previous = nullptr;
     Item *current = head;
 
     while (current != nullptr){ //traverse tp the node
-        if(current->name != targetName){
-            previous = current;
-            current = current->next;
-        }
-        else if (current->name == targetName && current->next != nullptr) { //in between node
-            // the current is node is the target
+
+        if(current->name == targetName){ //found the node;
             previous->next = current->next;
+
+            if(current->next == nullptr) { //its the tail
+                tail = previous;
+            }
+
             delete current;
+            return;
         }
-        else if (current->name == targetName && current->next == nullptr) { //the last node
-            previous->next = nullptr;
-            delete current;
-        }
+    
+        //if not found, continue traversing
+        previous = current;
+        current = current->next;
     }
 
 }
-

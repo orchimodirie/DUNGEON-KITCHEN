@@ -2,6 +2,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "Inventory.h"
 #include <iostream> 
 #include <string>
 using namespace std;
@@ -33,6 +34,7 @@ class Player : public Entity {
     int level;
     int exp;
     int expToNextLevel;
+    InventoryList inventory;
 
     const int HealAmount = 25;
 

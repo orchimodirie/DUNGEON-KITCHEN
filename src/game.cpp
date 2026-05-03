@@ -49,6 +49,7 @@ void Game::showMenu()
         battleMenu.addSeparator(); 
         battleMenu.addOption("[1] START THE GAME!");
         battleMenu.addOption("[2] QUIT!");
+        battleMenu.addOption("[3] View Inventory");
         
         // Pass true to tell the box not to add spacing at the bottom yet
         battleMenu.draw(true); 
@@ -69,6 +70,9 @@ void Game::showMenu()
             case 2:
                 currentState = GAMEOVER;
                 break;
+            case 3:
+                myPlayer->inventory.display();
+                continue;
             }
             isValidInput = true;
         }
@@ -95,7 +99,7 @@ void Game::playturn() {
     int randomEXP = (rand() % 61 ) + 40;
 
     Enemy goblin(randomName, randomHP, randomDMG, randomEXP);
-    
+
     while(myPlayer->isAlive() && goblin.isAlive()) {
         
         system("cls"); //clear screenW
@@ -171,6 +175,21 @@ void Game::playturn() {
         resultbox.addOption("Gained " + to_string(goblin.expDrop) + " EXP!");
         resultbox.draw(false); 
         resultbox.systemPause("Press [Enter] to continue...");
+
+        int dropChance = rand() % 100;
+        if (dropChance < 100) {
+            system("cls");
+            MenuBox weaponDrop(2);
+            string Item[] = {"Stale Baguette", "Iron Skillet" , "Chef's knife", "Golden Spatula"};
+            int random_WN = rand() % 4;
+
+            int random_BNS_DMG = (rand() % 15) + 5;
+            
+            string ItemName = Item[random_WN];
+            myPlayer->inventory.AddItem(ItemName, random_BNS_DMG);
+
+            weaponDrop.addOption("The Goblin drop a " + ItemName);
+        }
         
         // 3. Check for Level Up (No 'else' needed here!)
         if (myPlayer->exp >= myPlayer->expToNextLevel) {
