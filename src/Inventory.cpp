@@ -2,6 +2,7 @@
 #include <string>
 #include "displayUI.h"
 #include <iostream>
+#include "Game.h"
 
 //destructor
 InventoryList::~InventoryList() {
@@ -27,7 +28,7 @@ void InventoryList::AddItem(std::string n, int dmg) {
 }
 
 void InventoryList::display() {
-    system("cls");
+    clearScreen();
     MenuBox invBox(2);
     invBox.setTitle("--- INVENTORY ---");
 

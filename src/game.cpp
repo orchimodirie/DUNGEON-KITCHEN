@@ -41,7 +41,7 @@ void Game::showMenu()
     // print a welcome title
    bool isValidInput = false;
     while (!isValidInput){
-        system("cls");
+        clearScreen();
         MenuBox battleMenu(2); // Reduced padding to match your image style
 
         battleMenu.setTitle("FlavorTown RPG");
@@ -102,7 +102,7 @@ void Game::playturn() {
 
     while(myPlayer->isAlive() && goblin.isAlive()) {
         
-        system("cls"); //clear screenW
+        clearScreen(); //clear screenW
 
         MenuBox battleUI(2);
         battleUI.setTitle(" BATTLE ---");
@@ -127,7 +127,7 @@ void Game::playturn() {
         int option = battleUI.getUserInput();
         
         if(option == 1) {
-            system("cls");
+            clearScreen();
             goblin.takeDamage(myPlayer->damage);
             //draw box for the feedback
             MenuBox hitbox(2);
@@ -136,7 +136,7 @@ void Game::playturn() {
             hitbox.draw(false);
             hitbox.systemPause("Press [Enter] to continue...");
         } else if (option == 2) {
-            system("cls");
+            clearScreen();
             MenuBox healbox(2);
             healbox.setTitle("Player Healed!");
             healbox.addOption("Last HP: " + to_string(myPlayer->health));
@@ -150,7 +150,7 @@ void Game::playturn() {
         }
 
         if (goblin.isAlive()) {
-            system("cls");
+            clearScreen();
             MenuBox hitbox(2);
             myPlayer->takeDamage(goblin.damage);
 
@@ -162,14 +162,14 @@ void Game::playturn() {
     }
 
     //after the loop exit
-    system("cls");
+    clearScreen();
     MenuBox resultbox(2);
     
     if (myPlayer->isAlive()) {
-        // 1. Grant EXP
+        // Grant EXP
         myPlayer->exp += goblin.expDrop;
 
-        // 2. Show Victory Screen
+        // Show Victory Screen
         resultbox.setTitle("VICTORY!");
         resultbox.addOption("You cooked the " + goblin.name + "!");
         resultbox.addOption("Gained " + to_string(goblin.expDrop) + " EXP!");
@@ -177,8 +177,8 @@ void Game::playturn() {
         resultbox.systemPause("Press [Enter] to continue...");
 
         int dropChance = rand() % 100;
-        if (dropChance < 100) {
-            system("cls");
+        if (dropChance < 25) { // 40% drop chance
+            clearScreen();
             MenuBox weaponDrop(2);
             string Item[] = {"Stale Baguette", "Iron Skillet" , "Chef's knife", "Golden Spatula"};
             int random_WN = rand() % 4;
@@ -193,11 +193,11 @@ void Game::playturn() {
             weaponDrop.systemPause("Press [Enter] to continue");
         }
         
-        // 3. Check for Level Up (No 'else' needed here!)
+        // Check for Level Up (No 'else' needed here!)
         if (myPlayer->exp >= myPlayer->expToNextLevel) {
             myPlayer->levelUp();
 
-            system("cls");
+            clearScreen();
             MenuBox levelbox(2); // Use the new box!
             levelbox.setTitle("LEVEL UP!");
             levelbox.addEmptyLine();
@@ -212,7 +212,7 @@ void Game::playturn() {
         currentState = MENU;
 
     } else {
-        // 4. Defeat Screen (This is the ONLY 'else' we need)
+        // Defeat Screen (This is the ONLY 'else' we need)
         resultbox.setTitle("DEFEATED!");
         resultbox.addOption("Cooked by " + goblin.name + "!");
         resultbox.draw(false);
@@ -224,7 +224,7 @@ void Game::playturn() {
 
 void Game::showGameOver() {
 
-    system("cls"); //clear current screeen
+    clearScreen(); //clear current screeen
     MenuBox playBox(6);
     playBox.setTitle("GAME OVER!");
     playBox.addEmptyLine();

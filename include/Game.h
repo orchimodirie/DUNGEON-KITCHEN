@@ -5,6 +5,14 @@
 #include <string>
 #include "Entity.h"
 
+inline void clearScreen() {
+    #ifdef _WIN32
+        system("cls");   // If compiling on Windows, use cls
+    #else
+        system("clear"); // If compiling on Linux/Mac/Replit, use clear
+    #endif
+}
+
 enum GameState {
     MENU,
     PLAYING,
