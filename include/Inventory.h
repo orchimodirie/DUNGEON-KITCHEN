@@ -32,7 +32,7 @@ public:
     ~InventoryList();
     //methods
     void AddItem(std::string n, int dmg);
-    void display();
+    Item* displayAndEquip();
     void dropItem(std::string targetName);
 
 };

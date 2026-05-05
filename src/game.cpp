@@ -71,7 +71,11 @@ void Game::showMenu()
                 currentState = GAMEOVER;
                 break;
             case 3:
-                myPlayer->inventory.display();
+                Item* selectedItem = myPlayer->inventory.displayAndEquip(); // the function will return the node of chosen weapon
+                if(selectedItem != nullptr) {
+                    myPlayer->equipedWeapon = selectedItem; // equiping the item
+                    myPlayer->totalDMG += myPlayer->equipedWeapon->DamageBonus;
+                }
                 continue;
             }
             isValidInput = true;
@@ -114,40 +118,43 @@ void Game::playturn() {
         // Display dynamic stats (using to_string to convert integers to text)
         battleUI.addOption("EXP: " + to_string(myPlayer->exp) + "/" + to_string(myPlayer->expToNextLevel)  + "  |  Potions: " + to_string(myPlayer->potions));
         
+        if(myPlayer->equipedWeapon != nullptr) battleUI.addOption("Weapon " + myPlayer->equipedWeapon->name + " | Total DMG: " + to_string(myPlayer->totalDMG));
         
         battleUI.addEmptyLine();
         battleUI.addOption(goblin.name + " HP: " + to_string(goblin.health));
         battleUI.addSeparator();
         
         // Options
-        battleUI.addOption("[1] Attack with Spatula");
+        battleUI.addOption("[1] Attack");
         battleUI.addOption("[2] Drink Heal Potion");
 
         battleUI.draw(true);
         int option = battleUI.getUserInput();
         
-        if(option == 1) {
-            clearScreen();
-            goblin.takeDamage(myPlayer->damage);
-            //draw box for the feedback
-            MenuBox hitbox(2);
-            hitbox.setTitle("Bam! Bam! Bam!");
-            hitbox.addOption("You hit " + goblin.name + " for " + to_string(myPlayer->damage) + " damage!");
-            hitbox.draw(false);
-            hitbox.systemPause("Press [Enter] to continue...");
-        } else if (option == 2) {
-            clearScreen();
-            MenuBox healbox(2);
-            healbox.setTitle("Player Healed!");
-            healbox.addOption("Last HP: " + to_string(myPlayer->health));
-                myPlayer->heal();
-            healbox.addOption("New HP: " + to_string(myPlayer->health));
-            healbox.draw(false);
-            healbox.systemPause("Press [Enter] to continue... ");
+            if(option == 1) {
+                clearScreen();
+                
 
-        } else {
-            continue; // wrong input choice will restart the looping game
-        }
+                goblin.takeDamage(myPlayer->totalDMG);
+                //draw box for the feedback
+                MenuBox hitbox(2);
+                hitbox.setTitle("Bam! Bam! Bam!");
+                hitbox.addOption("You hit " + goblin.name + " for " + to_string(myPlayer->totalDMG) + " damage!");
+                hitbox.draw(false);
+                hitbox.systemPause("Press [Enter] to continue...");
+            } else if (option == 2) {
+                clearScreen();
+                MenuBox healbox(2);
+                healbox.setTitle("Player Healed!");
+                healbox.addOption("Last HP: " + to_string(myPlayer->health));
+                    myPlayer->heal();
+                healbox.addOption("New HP: " + to_string(myPlayer->health));
+                healbox.draw(false);
+                healbox.systemPause("Press [Enter] to continue... ");
+
+            } else {
+                continue; // wrong input choice will restart the looping game
+            }
 
         if (goblin.isAlive()) {
             clearScreen();
@@ -177,7 +184,7 @@ void Game::playturn() {
         resultbox.systemPause("Press [Enter] to continue...");
 
         int dropChance = rand() % 100;
-        if (dropChance < 25) { // 40% drop chance
+        if (dropChance < 25) { // 25% drop chance
             clearScreen();
             MenuBox weaponDrop(2);
             string Item[] = {"Stale Baguette", "Iron Skillet" , "Chef's knife", "Golden Spatula"};

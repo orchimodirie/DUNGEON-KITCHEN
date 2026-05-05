@@ -11,7 +11,7 @@ class Entity {
 public:
     string name;
     int health;
-    int damage;
+    int damage; // base damage of an enitity
 
     Entity(string n, int h, int d): name(n), health(h), damage(d) {};
 
@@ -30,13 +30,15 @@ public:
 class Player : public Entity { 
     public:
     int  maxHealth;
+    int totalDMG; // given by the equipped weapon and base damage;
     int potions;
     int level;
     int exp;
     int expToNextLevel;
     InventoryList inventory;
+    Item *equipedWeapon;
 
-    const int HealAmount = 25;
+    const int HealAmount = 15;
 
         Player(string n, int h, int d) : Entity(n, h, d) {
             maxHealth = h;
@@ -44,6 +46,8 @@ class Player : public Entity {
             potions = 3; // default number of potions
             exp = 0;    // default baseline of exp
             expToNextLevel = 100;   //intial threshold of level 1
+            equipedWeapon = nullptr; // no current equipped weapon
+            totalDMG = damage;
         }
 
         void heal() {

@@ -27,15 +27,22 @@ void InventoryList::AddItem(std::string n, int dmg) {
     }
 }
 
-void InventoryList::display() {
+Item* InventoryList::displayAndEquip() {
     clearScreen();
+
     MenuBox invBox(2);
     invBox.setTitle("--- INVENTORY ---");
 
     if (head == nullptr) 
     {
             invBox.addOption("No item YET");
-    } else {
+            invBox.addEmptyLine();
+            invBox.draw(false);
+            invBox.systemPause("Press [Enter] to continue...");
+            return nullptr;
+    } 
+    
+    if(head != nullptr) {
         Item *walker = head;
         int counter = 1;
 
@@ -48,7 +55,23 @@ void InventoryList::display() {
 
     invBox.addEmptyLine();
     invBox.draw(false);
-    invBox.systemPause("Press [Enter] to close inventory...");
+    int choice = invBox.getUserInput("Enter item number to equip (or 0 to exit): ");
+
+    if(choice == 0) {
+        return nullptr;
+    }
+    if(choice > 0) {
+        Item* current = head;
+
+        for(int i = 0; i<choice-1; i++){
+            current = current->next;
+        }
+
+        return current;
+    }
+
+    //if none return nullptr
+    return nullptr;
 }
 
 
