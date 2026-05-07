@@ -74,7 +74,7 @@ void Game::showMenu()
                 Item* selectedItem = myPlayer->inventory.displayAndEquip(); // the function will return the node of chosen weapon
                 if(selectedItem != nullptr) {
                     myPlayer->equipedWeapon = selectedItem; // equiping the item
-                    myPlayer->totalDMG += myPlayer->equipedWeapon->DamageBonus;
+                    myPlayer->totalDMG = myPlayer->damage + myPlayer->equipedWeapon->DamageBonus;
                 }
                 continue;
             }

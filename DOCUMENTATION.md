@@ -38,8 +38,8 @@ Instead of just printing standard `cout` text line by line, I built a `MenuBox` 
 This file heavily utilizes **Inheritance**, a core pillar of OOP.
 - **`Entity` (Base Class):** Represents any living thing in the game. It holds a `name`, `health`, and `damage`. It also handles universal logic like `isAlive()` and `takeDamage(int dmg)`.
 - **`Player` (Derived Class):** Inherits from `Entity`. 
-  - **Additions:** Adds `maxHealth`, `potions`, `level`, `exp`, `expToNextLevel`, and an `InventoryList`.
-  - **Logic:** Handles leveling up (scaling max HP by 20 and multiplying required EXP by 1.5) and potion logic (healing 25 HP without exceeding max HP).
+  - **Additions:** Adds `maxHealth`, `potions`, `level`, `exp`, `expToNextLevel`, and an `InventoryList`. It also tracks combat stats via `totalDMG` and an `Item *equipedWeapon` pointer.
+  - **Logic:** Handles leveling up (scaling max HP by 20 and multiplying required EXP by 1.5) and potion logic (healing 15 HP without exceeding max HP).
 - **`Enemy` (Derived Class):** Inherits from `Entity`.
   - **Additions:** Simply adds an `expDrop` variable so the game knows how much EXP to give the player upon victory.
 
@@ -48,6 +48,7 @@ Instead of using a standard `std::vector` or array, the inventory is built from 
 - **`Item` (Node):** Acts as the node in our linked list. Contains `name`, `DamageBonus`, and a `next` pointer.
 - **`InventoryList` (List Manager):** Manages `head` and `tail` pointers.
   - **`AddItem`:** Appends a newly dynamically allocated `Item` to the `tail` of the list.
+  - **`displayAndEquip`:** Uses the `MenuBox` UI to list items dynamically. Prompts the user to select an item, traverses the list, and returns an `Item*` pointer so the game can equip it.
   - **`dropItem`:** Handles safely traversing the list to find a target item by name, updating the `previous` node's pointer, and `delete`-ing the node to prevent memory leaks.
   - **Destructor:** Iterates through all remaining items when the game closes and deletes them to clean up the heap.
 
@@ -68,6 +69,12 @@ This is the meat of the game right now.
    - **Level Up:** If EXP exceeds the threshold, `player->levelUp()` triggers.
    - **Defeat:** The state switches to `GAMEOVER`.
 
+### F. Equipment System
+Recently implemented, this system bridges the Inventory, Entity, and Game Loop systems:
+- **Viewing & Selecting:** The player can access their inventory from the main menu (`Game::showMenu()`, Option 3).
+- **Equipping Logic:** Upon selecting an item, a pointer to that `Item` node is returned. The `Player` object stores this in `equipedWeapon` and dynamically updates `totalDMG`.
+- **Combat Integration:** The `MenuBox` battle UI dynamically displays the equipped weapon's name and the player's enhanced `totalDMG`, which is directly applied when attacking enemies in `playturn()`.
+
 ---
 
 ## 4. Current Status & What's Next
@@ -77,8 +84,9 @@ This is the meat of the game right now.
 * **Combat Math:** Turn-based hitting and healing works without bugs.
 * **Memory Management:** Inventory dynamically allocates and deallocates memory properly.
 * **RNG:** Stat generation makes every battle slightly unpredictable.
+* **Equipping Items:** Players can successfully equip items from their linked-list inventory to boost their damage.
 
 ### Missing Features / To-Do List for Future Updates:
-1. **Equipping Items:** Currently, items drop and go into the inventory, but they do not apply their `DamageBonus` to the player's attacks. We need a way to "equip" an item.
-2. **Saving / Loading:** Implementing a way to write the player's level and inventory to a `.txt` or `.json` file so progress isn't lost when closing the terminal.
-3. **Expanding the Game Loop:** Right now `playturn()` throws you straight into one battle and puts you back in the menu. We might want a "Dungeon Crawler" state where the player explores rooms.
+1. **Saving / Loading:** Implementing a way to write the player's level and inventory to a `.txt` or `.json` file so progress isn't lost when closing the terminal.
+2. **Expanding the Game Loop:** Right now `playturn()` throws you straight into one battle and puts you back in the menu. We might want a "Dungeon Crawler" state where the player explores rooms.
+3. **Fixing Equipment Stacking (Bug):** Currently, equipping weapons continuously adds their `DamageBonus` to `totalDMG` instead of recalculating the base damage. This needs a reset mechanism when swapping weapons.
