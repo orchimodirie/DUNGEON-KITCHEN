@@ -8,6 +8,9 @@
 inline void clearScreen() {
     #ifdef _WIN32
         system("cls");   // If compiling on Windows, use cls
+    #elif defined(__EMSCRIPTEN__)
+        // Web Browser! Print 40 blank lines to push old text up
+        for(int i = 0; i < 40; i++) std::cout << std::endl; 
     #else
         system("clear"); // If compiling on Linux/Mac/Replit, use clear
     #endif

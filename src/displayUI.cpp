@@ -87,7 +87,7 @@ int MenuBox::getUserInput (string promptText) {
 
         string leftIndent(lastXOffset, ' ');
         
-        cout << leftIndent << promptText;
+        cout << leftIndent << promptText << flush; // Force it to draw!
 
         cin >> input;
         cin.ignore(1000, '\n');
@@ -102,7 +102,7 @@ void MenuBox::systemPause(string promptText) {
     
         string leftIndent(lastXOffset, ' ');
 
-        cout << leftIndent << promptText;
+        cout << leftIndent << promptText << flush; // Force it to draw!
         cin.get();
     
         int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
