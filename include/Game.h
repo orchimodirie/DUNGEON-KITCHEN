@@ -5,6 +5,10 @@
 #include <string>
 #include "Entity.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 inline void clearScreen() {
     #ifdef _WIN32
         system("cls");   // If compiling on Windows, use cls
