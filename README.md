@@ -5,10 +5,17 @@
 **Flavortown RPG** is a text-based C++ roguelike adventure where you battle through infinite procedural kitchens, fight food-based monsters, and loot legendary ingredients.
 
 ## Features
-* **Infinite Dungeons:** No two runs are the same. The menu changes every night.
-* **Turn-Based Combat:** Strategic battles against *Spicy Goblins* and *Sous-Chef Skeletons*.
-* **Loot System:** Find equipment like the *Stale Baguette* or the *Saucepan of Truth*.
-* **Progression:** Level up your chef and gain stats to survive longer services.
+* **Turn-Based Combat:** Strategic battles against randomly generated food-based monsters with attack and healing mechanics.
+* **Linked-List Inventory System:** Loot drops are stored in a custom-built, dynamically managed singly linked list. View and equip items like the *Stale Baguette* to increase your damage.
+* **Progression:** Gain EXP from defeating enemies, level up your chef, and increase stats to survive longer services.
+* **Custom UI Engine:** A dynamically sizing terminal UI (`MenuBox`) that centers itself and handles inputs cleanly.
+* **Procedural Encounters:** Infinite random enemy encounters with varied stats and loot drops.
+
+## Future Features
+* **Save/Load System:** Persistent progression so you don't lose your stats and inventory between sessions.
+* **Dungeon Crawler Exploration:** Expanding the game loop to allow players to explore rooms instead of straight random encounters.
+* **Expanded Loot:** More weapon types, armor slots, and different consumable items.
+* **Boss Battles:** Special, high-difficulty encounters with unique mechanics.
 
 ## How to Build & Run
 You need a C++ compiler (GCC/Clang/MSVC) and CMake.

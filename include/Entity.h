@@ -63,6 +63,13 @@ class Player : public Entity {
             maxHealth += 20;
             health = maxHealth;
             potions = 3;
+            damage += 5; // Increase base damage
+            
+            // Recalculate total damage to include the new base damage
+            totalDMG = damage;
+            if (equipedWeapon != nullptr) {
+                totalDMG += equipedWeapon->DamageBonus;
+            }
 
             exp -= expToNextLevel; // this will retain the extra exp
             expToNextLevel *= 1.5;
