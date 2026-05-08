@@ -1,5 +1,9 @@
 #include "displayUI.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 MenuBox::MenuBox(int padAmmount ) {
     padding = padAmmount;
     terminalWidth = 80;
@@ -89,8 +93,17 @@ int MenuBox::getUserInput (string promptText) {
         
         cout << leftIndent << promptText << flush; // Force it to draw!
 
+        // 1. Reduced from 100ms to 16ms (1 frame). Kills the latency!
+        #ifdef __EMSCRIPTEN__
+        emscripten_sleep(16); 
+        #endif
+
         cin >> input;
+        cin.clear();
         cin.ignore(1000, '\n');
+        
+        // 2. THE ECHO FIX: Print what the user just typed!
+        cout << input << endl; 
         
         int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
         for (int i = 0; i < remainingLines; i++) cout << endl;
@@ -103,6 +116,12 @@ void MenuBox::systemPause(string promptText) {
         string leftIndent(lastXOffset, ' ');
 
         cout << leftIndent << promptText << flush; // Force it to draw!
+        
+        // Reduced to 16ms
+        #ifdef __EMSCRIPTEN__
+        emscripten_sleep(16); 
+        #endif
+
         cin.get();
     
         int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;

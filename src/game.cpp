@@ -20,11 +20,6 @@ void Game::run() // main siwtcher of current state
 {
     while (isrunning)
     {
-        // THE HACK: Let the browser breathe for 50ms
-        #ifdef __EMSCRIPTEN__
-        emscripten_sleep(50);
-        #endif
-
         // the fsm router
         switch (currentState)
         {
@@ -111,11 +106,6 @@ void Game::playturn() {
 
     while(myPlayer->isAlive() && goblin.isAlive()) {
         
-        // THE HACK: Let the browser draw the battle UI
-        #ifdef __EMSCRIPTEN__
-        emscripten_sleep(50);
-        #endif
-
         clearScreen(); //clear screenW
 
         MenuBox battleUI(2);
