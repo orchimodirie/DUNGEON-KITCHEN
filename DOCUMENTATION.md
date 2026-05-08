@@ -1,7 +1,7 @@
-# Flavortown RPG - Project Documentation & Progress Tracker
+# DUNGEON KITCHEN - Project Documentation & Progress Tracker
 
 ## 1. Project Overview
-**Flavortown RPG** is a text-based, turn-based C++ roguelike adventure. The goal of this project is to apply Object-Oriented Programming (OOP) concepts, data structures (like Linked Lists), and basic game loop architecture in C++. 
+**DUNGEON KITCHEN** is a text-based, turn-based C++ roguelike adventure. The goal of this project is to apply Object-Oriented Programming (OOP) concepts, data structures (like Linked Lists), and basic game loop architecture in C++. 
 
 This document serves as a summary of the progress made so far, explaining the logic, structure, and design decisions behind the code.
 

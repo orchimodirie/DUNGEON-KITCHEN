@@ -44,7 +44,7 @@ void Game::showMenu()
         clearScreen();
         MenuBox battleMenu(2); // Reduced padding to match your image style
 
-        battleMenu.setTitle("FlavorTown RPG");
+        battleMenu.setTitle("DUNGEON KITCHEN");
         
         battleMenu.addSeparator(); 
         battleMenu.addOption("[1] START THE GAME!");

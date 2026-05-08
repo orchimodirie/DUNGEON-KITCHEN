@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 4.2.1)
 
-project(flavortown-rpg)
+project(DungeonKitchen)
 
 include_directories(include)
 
-add_executable(flavortown-rpg src/main.cpp src/game.cpp src/displayUI.cpp
+add_executable(DungeonKitchen src/main.cpp src/game.cpp src/displayUI.cpp
     src/Inventory.cpp)
