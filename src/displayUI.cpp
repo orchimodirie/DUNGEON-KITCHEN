@@ -98,12 +98,18 @@ int MenuBox::getUserInput (string promptText) {
         emscripten_sleep(16); 
         #endif
 
-        cin >> input;
-        cin.clear();
-        cin.ignore(1000, '\n');
+        // THE FIX: Read as a string to avoid newline trapping
+        string rawInput;
+        cin >> rawInput;
         
-        // 2. THE ECHO FIX: Print what the user just typed!
-        cout << input << endl; 
+        // Convert string to integer safely
+        try {
+            input = stoi(rawInput);
+        } catch (...) {
+            input = -1; // If they type a letter, it defaults to a wrong choice
+        }
+        
+        cout << input << endl; // Echo the input
         
         int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
         for (int i = 0; i < remainingLines; i++) cout << endl;
@@ -122,7 +128,9 @@ void MenuBox::systemPause(string promptText) {
         emscripten_sleep(16); 
         #endif
 
-        cin.get();
+        // THE FIX: Replace cin.get() with string input to avoid hangs
+        string dummy;
+        cin >> dummy;
     
         int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
         for (int i = 0; i < remainingLines; i++) cout << endl;
