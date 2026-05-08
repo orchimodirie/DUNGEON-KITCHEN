@@ -15,11 +15,14 @@
 
 *Note: This project is currently in an early beta version. The core engine is built, but there are many more possibilities in the future!*
 
+> Note: AI assistance was used only for setting up the online playable WebAssembly deployment link and configuring the CMake-based build process. The core implementation of the inventory linked list, game loops, FSM routing, and dynamic UI box is an original design written by the author.
+
 ### Possible Future Features
 * **Save/Load Functionality:** Saving player progression and inventory between sessions.
 * **Dungeon Crawler Mode:** Transitioning from an arcade-style battle gauntlet to exploring physical rooms and maps.
 * **Expanded Combat & Magic:** Adding defense stats, armor equipment slots, and special chef abilities.
-
+## Screenshot
+![Dungeon Kitchen screenshot](assets/s1.png)
 ## How to Play / Build
 
 ### Play Online (Web Version)
