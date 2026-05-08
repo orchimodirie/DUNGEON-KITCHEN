@@ -88,50 +88,55 @@ void MenuBox::draw(bool expectingInput) {
 
 int MenuBox::getUserInput (string promptText) {
     int input;
-
-        string leftIndent(lastXOffset, ' ');
+    string leftIndent(lastXOffset, ' ');
         
-        cout << leftIndent << promptText << flush; // Force it to draw!
+    cout << leftIndent << promptText << flush;
 
-        // 1. Reduced from 100ms to 16ms (1 frame). Kills the latency!
-        #ifdef __EMSCRIPTEN__
-        emscripten_sleep(16); 
-        #endif
+    #ifdef __EMSCRIPTEN__
+    emscripten_sleep(16); 
+    #endif
 
-        // THE FIX: Read as a string to avoid newline trapping
-        string rawInput;
-        cin >> rawInput;
-        
-        // Convert string to integer safely
+    // THE FIX: Use getline for clean reads
+    string rawInput;
+    getline(cin, rawInput);
+    
+    // THE FIX: Revive cin if the user clicked "Cancel" (EOF)
+    if (cin.fail() || cin.eof()) {
+        cin.clear();
+        input = -1; // Default to invalid input so game doesn't crash
+    } else {
         try {
             input = stoi(rawInput);
         } catch (...) {
-            input = -1; // If they type a letter, it defaults to a wrong choice
+            input = -1;
         }
+    }
+    
+    cout << input << endl; // Echo
         
-        cout << input << endl; // Echo the input
+    int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
+    for (int i = 0; i < remainingLines; i++) cout << endl;
         
-        int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
-        for (int i = 0; i < remainingLines; i++) cout << endl;
-        
-        return input;
+    return input;
 }
 
 void MenuBox::systemPause(string promptText) {
-    
-        string leftIndent(lastXOffset, ' ');
+    string leftIndent(lastXOffset, ' ');
 
-        cout << leftIndent << promptText << flush; // Force it to draw!
-        
-        // Reduced to 16ms
-        #ifdef __EMSCRIPTEN__
-        emscripten_sleep(16); 
-        #endif
-
-        // THE FIX: Replace cin.get() with string input to avoid hangs
-        string dummy;
-        cin >> dummy;
+    cout << leftIndent << promptText << flush;
     
-        int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
-        for (int i = 0; i < remainingLines; i++) cout << endl;
+    #ifdef __EMSCRIPTEN__
+    emscripten_sleep(16); 
+    #endif
+
+    // THE FIX: Use getline and clear for the pause as well
+    string dummy;
+    getline(cin, dummy);
+    
+    if (cin.fail() || cin.eof()) {
+        cin.clear();
+    }
+    
+    int remainingLines = terminalHeight - lastBoxHeight - lastYOffset - 1;
+    for (int i = 0; i < remainingLines; i++) cout << endl;
 }

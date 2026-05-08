@@ -29,6 +29,7 @@ jobs:
           mkdir -p public
           em++ -std=c++20 -I include src/main.cpp src/game.cpp src/displayUI.cpp src/Inventory.cpp -s ASYNCIFY -o public/index.html
           sed -i 's/<canvas/<canvas style="display:none;"/g' public/index.html
+          sed -i 's/<\/head>/<style>#output { height: 80vh !important; font-size: 18px !important; }<\/style><\/head>/g' public/index.html
           
       - name: Upload Web Files
         uses: actions/upload-pages-artifact@v3
