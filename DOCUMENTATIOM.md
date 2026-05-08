@@ -79,14 +79,20 @@ Recently implemented, this system bridges the Inventory, Entity, and Game Loop s
 
 ## 4. Current Status & What's Next
 
+**Note: This project is currently in an early beta version.** The foundational systems (OOP entities, linked list inventory, FSM game loop, and custom UI) are implemented and functional, but there are vast possibilities for future expansion.
+
 ### What is working well:
 * **UI Rendering:** The `MenuBox` dynamically sizes itself and looks great.
 * **Combat Math:** Turn-based hitting and healing works without bugs.
 * **Memory Management:** Inventory dynamically allocates and deallocates memory properly.
 * **RNG:** Stat generation makes every battle slightly unpredictable.
 * **Equipping Items:** Players can successfully equip items from their linked-list inventory to boost their damage.
+* **WebAssembly Compatibility:** The game compiles and runs smoothly in web browsers using Emscripten.
+* **WebAssembly Compatibility:** The game compiles and runs smoothly in web browsers using Emscripten. Play it here: DUNGEON KITCHEN. *(Note: you may need to press ESC/Cancel one time after inputting a choice to update the screen. Do not press cancel without a prior input to avoid locking the engine!)*
 
-### Missing Features / To-Do List for Future Updates:
-1. **Saving / Loading:** Implementing a way to write the player's level and inventory to a `.txt` or `.json` file so progress isn't lost when closing the terminal.
-2. **Expanding the Game Loop:** Right now `playturn()` throws you straight into one battle and puts you back in the menu. We might want a "Dungeon Crawler" state where the player explores rooms.
+### Possible Features / To-Do List for Future Updates:
+1. **Saving / Loading (Persistence):** Implementing a way to write the player's level and inventory to a `.txt` or `.json` file (or LocalStorage in WASM) so progress isn't lost.
+2. **Dungeon Crawler Mode:** Right now `playturn()` throws you straight into one battle and puts you back in the menu. We plan to add a "Dungeon Exploration" state where the player navigates rooms, finds chests, and encounters random events.
 3. **Fixing Equipment Stacking (Bug):** Currently, equipping weapons continuously adds their `DamageBonus` to `totalDMG` instead of recalculating the base damage. This needs a reset mechanism when swapping weapons.
+4. **Advanced Combat Mechanics:** Introducing defense stats, armor equipment slots, and consumable buff items.
+5. **Boss Encounters:** Special, high-difficulty enemies at certain level milestones.
